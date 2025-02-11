@@ -1,0 +1,76 @@
+package com.app.entities;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Random;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "account")
+
+public class Accounts extends BaseEntity {
+	
+	
+	
+	
+	      
+	
+	
+
+	
+
+	    @ManyToOne
+	    @JoinColumn(name = "user_id", nullable = false)
+	    private UserEntity user;
+
+	    @Column(name = "account_number", nullable = false, unique = true, length = 12, updatable = false)
+	    private String accountNumber;
+
+	    @Column(name = "account_type", nullable = false, length = 20)
+	    private String accountType = "Saving"; // Default to "Saving"
+
+	    @Column(name = "balance", nullable = false, precision = 15, scale = 2)
+	    private BigDecimal balance = BigDecimal.ZERO; // Default balance 0.00
+
+	    @Column(name = "is_active", nullable = false)
+	    private boolean isActive = true; // Default active
+
+	    @CreationTimestamp
+	    @Column(name = "created_at", nullable = false, updatable = false)
+	    private LocalDateTime createdAt = LocalDateTime.now();
+
+	    // ✅ Auto-generate account number before saving
+	    @PrePersist
+	    public void generateAccountNumber() {
+	        if (this.accountNumber == null) {
+	            this.accountNumber = generateRandomAccountNumber();
+	        }
+	    }
+
+	    // Helper method to generate a 12-digit random number
+	    private String generateRandomAccountNumber() {
+	        Random random = new Random();
+	        StringBuilder sb = new StringBuilder();
+	        for (int i = 0; i < 12; i++) {
+	            sb.append(random.nextInt(10)); // Append random digit (0-9)
+	        }
+	        return sb.toString();
+	    }
+	}
+
+
+	

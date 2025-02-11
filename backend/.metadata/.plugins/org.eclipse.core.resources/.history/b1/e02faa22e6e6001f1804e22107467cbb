@@ -1,0 +1,67 @@
+package com.app.service;
+
+import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.app.Transaction.DTO.TransactionPostDTO;
+import com.app.dto.ApiResponse;
+import com.app.entities.Accounts;
+import com.app.entities.Transaction;
+import com.app.entities.UserEntity;
+import com.app.repository.AccountsRepository;
+import com.app.repository.TransactionRepository;
+import com.app.repository.UserEntityRepository;
+
+@Service
+public class TransactionServiceImpl implements TransactionService {
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private UserEntityRepository userEntityRepository;
+
+    @Autowired
+    private AccountsRepository accountsRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Override
+    public ResponseEntity<?> addTransaction(TransactionPostDTO transactionPostDTO) {
+        // Fetch user
+        UserEntity user = userEntityRepository.findById(transactionPostDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionPostDTO.getUserId()));
+
+        // Fetch account
+        Accounts account = accountsRepository.findById(transactionPostDTO.getAccountId())
+                .orElseThrow(() -> new RuntimeException("Account not found with ID: " + transactionPostDTO.getAccountId()));
+
+        // Map DTO to Entity
+        Transaction transaction = modelMapper.map(transactionPostDTO, Transaction.class);
+        transaction.setUser(user);
+        transaction.setAccount(account);
+        transaction.setStatus("PENDING"); // Default status
+        
+        // Save transaction
+        Transaction savedTransaction = transactionRepository.save(transaction);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse("Transaction added successfully"));
+    }
+
+    @Override
+    public ApiResponse getTransactionsByEmail(String email) {
+        Optional<UserEntity> userOptional = userEntityRepository.findByEmail(email);
+
+        if (userOptional.isPresent()) {
+            return new ApiResponse("Transactions found for email: " + email);
+        } else {
+            return new ApiResponse("No transactions found for email: " + email);
+        }
+    }
+}

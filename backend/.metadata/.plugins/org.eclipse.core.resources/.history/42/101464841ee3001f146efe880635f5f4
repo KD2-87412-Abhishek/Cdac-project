@@ -1,0 +1,18 @@
+package com.app.service;
+
+import java.util.List;
+
+
+import com.app.entities.User;
+
+public interface userService {
+	List<User> getAllUser();
+
+	User addNewEmp(User transientUser);
+
+	User getEmpDetails(Long UserId);
+
+	User updateEmp(User detachedEmp);
+
+	String deleteEmp(Long UserId);
+}

@@ -1,0 +1,43 @@
+package com.app.service;
+
+import java.util.Optional;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.Account.dto.AccountsGetDto;
+import com.app.dto.ApiResponse;
+import com.app.entities.Accounts;
+
+import com.app.repository.AccountsRepository;
+@Service
+public class AccountServiceImpl implements AccountsService {
+	@Autowired
+	AccountsRepository accountsRepository;
+	  @Autowired
+	    private ModelMapper modelMapper;
+
+
+	
+
+	@Override
+	  public ApiResponse getAccountByEmail(String email) {
+        Optional<Accounts> optionalAccount = accountsRepository.findByUser_Email(email);
+
+        if (optionalAccount.isPresent()) {
+            Accounts account = optionalAccount.get();
+
+            // Convert Entity to DTO using ModelMapper
+            AccountsGetDto accountDTO = modelMapper.map(account, AccountsGetDto.class);
+            accountDTO.setUserEmail(account.getUser().getEmail()); // Manually set email
+
+            return new ApiResponse("Account found successfully");
+        } else {
+            return new ApiResponse("Account not found for email: " + email);
+        }
+    }
+	}
+
+	
+

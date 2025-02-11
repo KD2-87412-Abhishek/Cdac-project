@@ -1,0 +1,17 @@
+package com.app.Account.dto;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import com.app.dto.BaseDTO;
+
+public class AccountsGetDto  extends BaseDTO{
+	private Long accountId;
+    private String accountNumber;
+    private String accountType;
+    private BigDecimal balance;
+    private boolean isActive;
+    private LocalDateTime createdAt;
+    private String userEmail;
+
+}

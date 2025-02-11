@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="lombok.Setter"/>
+    <fullyQualifiedTypeName name="com.app.entities.UserEntity"/>
+    <fullyQualifiedTypeName name="org.hibernate.annotations.CreationTimestamp"/>
+    <fullyQualifiedTypeName name="com.app.entities.Accounts.Account"/>
+    <fullyQualifiedTypeName name="com.app.repository.AccountsRepository"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+    <fullyQualifiedTypeName name="com.app.service.AccountsService"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="com.app.dto.BaseDTO"/>
+    <fullyQualifiedTypeName name="com.app.repository.UserEntityRepository"/>
+    <fullyQualifiedTypeName name="com.app.entities.BaseEntity"/>
+    <fullyQualifiedTypeName name="com.app.dto.ApiResponse"/>
+    <fullyQualifiedTypeName name="com.app.entities.Transaction"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RestController"/>
+    <fullyQualifiedTypeName name="jakarta.validation.constraints.Email"/>
+    <fullyQualifiedTypeName name="jakarta.validation.constraints.NotBlank"/>
+    <fullyQualifiedTypeName name="com.app.Account.dto.ManagerDto"/>
+    <fullyQualifiedTypeName name="com.app.custom_exceptions.ResourceNotFoundException"/>
+</qualifiedTypeNameHistroy>

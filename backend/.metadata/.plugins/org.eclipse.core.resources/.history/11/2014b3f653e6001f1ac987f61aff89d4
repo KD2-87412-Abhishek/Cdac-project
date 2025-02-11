@@ -1,0 +1,21 @@
+package com.app.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.app.entities.Accounts;
+import com.app.repository.AccountsRepository;
+
+public class AccountServiceImpl implements AccountsService {
+	@Autowired
+	AccountsRepository accountsRepository;
+
+	@Override
+	
+	}
+		
+		
+	}
+
+}

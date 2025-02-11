@@ -1,0 +1,72 @@
+package com.app.service;
+
+import java.time.LocalDateTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.Transaction.DTO.TransactionGetDTO;
+import com.app.Transaction.DTO.TransactionPostDTO;
+import com.app.custom_exceptions.ResourceNotFoundException;
+import com.app.entities.Accounts;
+import com.app.entities.Transaction;
+import com.app.repository.AccountsRepository;
+import com.app.repository.TransactionRepository;
+import com.app.repository.UserEntityRepository;
+
+@Service
+public class TransactionServiceImpl implements TransactionService {
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
+    private UserEntityRepository userEntityRepository;
+
+    @Autowired
+    private AccountsRepository accountsRepository;
+
+
+	}
+
+
+	@Override
+	public TransactionGetDTO createTransaction(TransactionPostDTO transactionPostDTO) {
+		 Accounts sourceAccount = accountsRepository.findById(transactionPostDTO.getSourceAccountId())
+		            .orElseThrow(() -> new ResourceNotFoundException("Source account not found"));
+		        Accounts destinationAccount = accountsRepository.findById(transactionPostDTO.getDestinationAccountId())
+		            .orElseThrow(() -> new ResourceNotFoundException("Destination account not found"));
+
+		        // Check for sufficient funds
+		        if (sourceAccount.getBalance() < transactionPostDTO.getAmount()) {
+		            throw new RuntimeException("Insufficient funds in source account");
+		        }
+
+		        // Perform the transaction
+		        sourceAccount.setBalance(sourceAccount.getBalance() - transactionPostDTO.getAmount());
+		        destinationAccount.setBalance(destinationAccount.getBalance() + transactionPostDTO.getAmount());
+
+		        // Save updated accounts
+		        accountsRepository.save(sourceAccount);
+		        accountsRepository.save(destinationAccount);
+
+		        // Create and save transaction record
+		        Transaction transaction = new Transaction();
+		        transaction.setSourceAccountId(transactionPostDTO.getSourceAccountId());
+		        transaction.setDestinationAccountId(transactionPostDTO.getDestinationAccountId());
+		        transaction.setAmount(transactionPostDTO.getAmount());
+		        transaction.setTransactionDate(LocalDateTime.now());
+
+		        Transaction savedTransaction = transactionRepository.save(transaction);
+
+		        // Map to DTO and return
+		        return modelMapper.map(savedTransaction, TransactionGetDTO.class);
+		    }
+		}
+		
+	
+
+   
+
+  
+

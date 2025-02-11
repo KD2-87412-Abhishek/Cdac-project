@@ -1,0 +1,42 @@
+package com.app.entities;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "transactions")  // Ensure plural table name consistency
+public class Transaction extends BaseEntity {
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
+    private Accounts account;
+
+    @Column(name = "amount", nullable = false, precision = 15, scale = 2)
+    private BigDecimal amount;
+
+    @Column(name = "transaction_type", nullable = false, length = 20)
+    private String transactionType; // e.g., "Deposit", "Withdrawal", "Transfer"
+
+    @Column(name = "status", nullable = false, length = 20)
+    private String status = "PENDING"; // Default status as "PENDING"
+
+    @CreationTimestamp
+    @Column(name = "transaction_date", nullable = false, updatable = false)
+    private LocalDateTime transactionDate;
+
+    @Column(name = "description", length = 255)
+    private String description;
+    
+}

@@ -1,0 +1,8 @@
+package com.app;
+
+public class Snippet {
+	public static void main(String[] args) {
+		.antMatchers("/user/login", "/manager/login").permitAll()
+	}
+}
+

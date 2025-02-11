@@ -1,0 +1,44 @@
+package com.app.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    // Dependency - password encoder
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // Configure the bean to customize Spring Security filter chain
+    @Bean
+    public SecurityFilterChain authorizeRequests(HttpSecurity http) throws Exception {
+        http.csrf(customizer -> customizer.disable())
+            .authorizeHttpRequests(request -> 
+                request.requestMatchers("/user/login", "/manager/login", // Permit login endpoints
+                        "/products/view", "/users/signup", "/users/signin","/user/add","/user/view","/user/**","/accounts/**",
+                        "/v3/api-docs/**", // Allow access to Swagger API docs
+                        "/swagger-ui/**", // Allow access to Swagger UI
+                        "/swagger-resources/**", // Allow access to Swagger resources
+                        "/v2/api-docs/**", // If using v2, allow access to v2 API docs
+                        "/webjars/**") // Allow access to webjars (for Swagger UI)
+                .permitAll()
+                .requestMatchers("/products/purchase/**").hasRole("CUSTOMER") // Role-based access
+                .requestMatchers("/products/add", "/products/delete").hasRole("ADMIN") // Role-based access
+                .anyRequest().authenticated() // All other requests require authentication
+            )
+            .httpBasic(Customizer.withDefaults())
+            .sessionManagement(session -> 
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Stateless session management
+
+        return http.build();
+    }
+}

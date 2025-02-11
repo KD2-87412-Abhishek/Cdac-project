@@ -1,0 +1,26 @@
+package com.app.dto;
+@Entity
+@Table(name = "managers") // Table name in the database
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+public class UserEntity extends BaseEntity { // Assuming BaseEntity contains the primary key
+
+    @Column(name = "first_name", length = 50, nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", length = 50, nullable = false)
+    private String lastName;
+
+    @Column(length = 100, unique = true, nullable = false)
+    private String email;
+
+    @Column(length = 50, nullable = false)
+    private String department;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+}

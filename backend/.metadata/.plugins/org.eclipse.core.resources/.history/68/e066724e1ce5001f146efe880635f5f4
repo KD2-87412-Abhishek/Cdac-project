@@ -1,0 +1,5 @@
+package com.app.Mannager.dto;
+
+public class ManagerDto {
+
+}
